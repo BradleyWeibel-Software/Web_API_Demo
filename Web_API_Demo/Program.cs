@@ -8,27 +8,42 @@ var app = builder.Build();
 
 app.UseHttpsRedirection();
 
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
+// Routing
 
-app.MapGet("/weatherforecast", () =>
+// "/shirts"
+app.MapGet("/shirts", () =>
 {
-    var forecast = Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
+    return "Reading all the shirts";
+    //return new[]
+    //{
+    //    new { Id = 1, Name = "Red Shirt", Size = "M" },
+    //    new { Id = 2, Name = "Blue Shirt", Size = "L" },
+    //    new { Id = 3, Name = "Green Shirt", Size = "S" }
+    //};
+});
+
+app.MapGet("/shirts/{id}", (int id) =>
+{
+    return $"Reading shirt with ID: {id}";
+    //return new { Id = id, Name = $"Shirt {id}", Size = "M" };
+});
+
+app.MapPost("/shirts", () =>
+{
+    return $"Creating a shirt";
+    // In a real application, you would save the shirt to a database here
+});
+
+app.MapPut("/shirts/{id}", (int id) =>
+{
+    return $"Updating shirt with ID: {id}";
+    // In a real application, you would update the shirt in the database here
+});
+
+app.MapDelete("/shirts/{id}", (int id) =>
+{
+    return $"Deleting shirt with ID: {id}";
+    // In a real application, you would delete the shirt from the database here
 });
 
 app.Run();
-
-internal record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
