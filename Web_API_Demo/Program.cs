@@ -8,11 +8,11 @@ var app = builder.Build();
 
 app.UseHttpsRedirection();
 
-app.UseRouting();
+//app.UseRouting();
 
-app.UseAuthentication();
+//app.UseAuthentication();
 
-app.UseAuthorization();
+//app.UseAuthorization();
 
 // Routing
 
