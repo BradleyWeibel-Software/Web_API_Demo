@@ -63,6 +63,7 @@ namespace Web_API_Demo.Controllers
                 $"id: {shirtData.Id}, \n" +
                 $"brand: '{shirtData.Brand}', \n" +
                 $"size: {shirtData.Size}, \n" +
+                $"sex: {shirtData.Sex}, \n" +
                 $"colour: {shirtData.Colour}";
         }
 
