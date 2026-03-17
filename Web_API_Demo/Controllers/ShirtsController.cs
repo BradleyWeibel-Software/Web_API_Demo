@@ -11,23 +11,30 @@ namespace Web_API_Demo.Controllers
 
         // GET: https://localhost:7104/api/shirts
         [HttpGet]
-        public string GetShirts()
+        public List<Shirt> GetShirts()
         {
-            return "Reading all shirts";
+            return shirts;
         }
 
         // GET : https://localhost:7104/api/shirts/1
         [HttpGet("{id}")]
-        public string GetShirtById(int id)
+        public IActionResult GetShirtById(int id)
         {
-            return $"Reading shirt: {id}";
+            if (id <= 0)
+                return BadRequest();
+
+            var result = shirts.FirstOrDefault(s => s.Id == id);
+            if (result == null)
+                return NotFound();
+            else
+                return Ok(result);
         }
 
         // GET : https://localhost:7104/api/shirts/1/blue
         [HttpGet("{id}/{colour}")]
-        public string GetShirtByIdAndColour(int id, [FromRoute]string colour)
+        public IActionResult GetShirtByIdAndColour(int id, [FromRoute]string colour)
         {
-            return $"Reading shirt: {id} with colour: '{colour}'";
+            return Ok($"Reading shirt: {id} with colour: '{colour}'");
         }
 
         // GET : https://localhost:7104/api/shirts/getshirt/1?colour=blue&size=large
@@ -88,6 +95,24 @@ namespace Web_API_Demo.Controllers
         {
             return $"Deleting shirt: {id}";
         }
+
+        #endregion
+
+        #region Helpers
+
+        private List<Shirt> shirts = new List<Shirt>()
+        {
+            new Shirt() { Id = 1, Brand = "Nike", Colour = "Black", Size = 10, Sex = "Female" },
+            new Shirt() { Id = 2, Brand = "Puma", Colour = "Red", Size = 12, Sex = "Male" },
+            new Shirt() { Id = 3, Brand = "RHCP", Colour = "Grey", Size = 10, Sex = "Female" },
+            new Shirt() { Id = 4, Brand = "TBK", Colour = "Pink", Size = 6, Sex = "Female" },
+            new Shirt() { Id = 5, Brand = "TBS", Colour = "Black", Size = 8, Sex = "Male" },
+            new Shirt() { Id = 6, Brand = "DS", Colour = "White", Size = 11, Sex = "Male" },
+            new Shirt() { Id = 7, Brand = "Adidas", Colour = "Grey", Size = 10, Sex = "Female" },
+            new Shirt() { Id = 8, Brand = "[no-name]", Colour = "White", Size = 12, Sex = "Male" },
+            new Shirt() { Id = 9, Brand = "Nike", Colour = "Gold", Size = 10, Sex = "Female" },
+            new Shirt() { Id = 10, Brand = "RHCP", Colour = "Red", Size = 10, Sex = "Female" }
+        };
 
         #endregion
     }
