@@ -57,10 +57,26 @@ namespace Web_API_Demo.Controllers
         #region POST
 
         // POST: https://localhost:7104/api/shirts
+        // POST: https://localhost:7104/api/shirts/AddShirt
         [HttpPost]
-        public string CreateShirt()
+        public IActionResult AddShirt([FromBody]Shirt newShirt)
         {
-            return $"Creating a shirt from bupkis I guess";
+            if (newShirt == null)
+                return BadRequest($"Shirt contains no data");
+
+            var shirtAlreadyExists = ShirtRepository.ShirtExists(newShirt.Id ?? 0);
+            if (shirtAlreadyExists)
+                return BadRequest($"Shirt Id '{newShirt.Id}' already exists");
+
+            shirtAlreadyExists = ShirtRepository.GetShirtByProperties(newShirt) != null;
+            if (shirtAlreadyExists)
+                return BadRequest($"Shirt with these characteristics already exists");
+
+            var newShirtId = ShirtRepository.AddShirt(newShirt);
+            if (newShirtId == null)
+                return BadRequest($"Shirt creation was unsuccessful");
+            else
+                return CreatedAtAction(nameof(ShirtRepository.GetShirtById), new { Id = newShirt }, newShirt);
         }
 
         // POST: https://localhost:7104/api/shirts/createshirtwithbody

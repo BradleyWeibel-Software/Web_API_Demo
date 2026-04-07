@@ -23,5 +23,28 @@ namespace Web_API_Demo.Repositories
         public static List<Shirt> GetShirts() => shirts;
 
         public static Shirt? GetShirtById(int id) => shirts.FirstOrDefault(s => s.Id == id);
+
+        public static int? AddShirt(Shirt shirt)
+        {
+            if (shirt == null)
+                return null;
+
+            int maxId = shirts.Max(s => s.Id) ?? 0;
+            shirt.Id = maxId + 1;
+
+            shirts.Add(shirt);
+
+            return shirt.Id;
+        }
+
+        public static Shirt? GetShirtByProperties(Shirt shirtData) => shirts.FirstOrDefault(s =>
+            !string.IsNullOrWhiteSpace(shirtData.Brand) && 
+            s.Brand.Equals(shirtData?.Brand, StringComparison.OrdinalIgnoreCase) &&
+            !string.IsNullOrWhiteSpace(shirtData.Colour) && 
+            s.Colour.Equals(shirtData?.Colour, StringComparison.OrdinalIgnoreCase) &&
+            shirtData.Size != 0 && 
+            s.Size == shirtData?.Size &&
+            !string.IsNullOrWhiteSpace(shirtData.Sex) && 
+            s.Sex.Equals(shirtData.Sex, StringComparison.OrdinalIgnoreCase));
     }
 }
