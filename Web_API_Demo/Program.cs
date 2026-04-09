@@ -1,5 +1,12 @@
+using Microsoft.EntityFrameworkCore;
+using Web_API_Demo.Data;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddDbContext<ApplicationDBContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("ShirtStoreManagement"));
+});
 
 // Add services to the container.
 builder.Services.AddControllers();
