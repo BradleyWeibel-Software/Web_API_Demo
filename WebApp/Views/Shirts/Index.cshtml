@@ -1,0 +1,29 @@
+﻿@using Web_API_Demo.Model
+
+@model List<Shirt>
+
+<h3>Shirts</h3>
+<br/>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Brand</th>
+            <th>Sex</th>
+            <th>Colour</th>
+            <th>Size</th>
+            <th>Price</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var shirt in Model)
+        {
+            <tr>
+                <td>@shirt.Brand</td>
+                <td>@shirt.Sex</td>
+                <td>@shirt.Colour</td>
+                <td>@shirt.Size</td>
+                <td></td>
+            </tr>
+        }
+    </tbody>
+</table>
