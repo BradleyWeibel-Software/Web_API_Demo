@@ -1,9 +1,17 @@
-﻿using Web_API_Demo.Model;
+﻿using Web_API_Demo.Data;
+using Web_API_Demo.Model;
 
 namespace Web_API_Demo.Repositories
 {
     public class ShirtRepository
     {
+        private readonly ApplicationDBContext database;
+
+        public ShirtRepository(ApplicationDBContext db)
+        {
+            this.database = db;
+        }
+
         private static List<Shirt> shirts = new List<Shirt>()
         {
             new Shirt() { Id = 1, Brand = "Nike", Colour = "Black", Size = 10, Sex = "Female" },
@@ -20,19 +28,19 @@ namespace Web_API_Demo.Repositories
 
         #region GET
 
-        public static bool ShirtExists(int id) => shirts.Any(i => i.Id == id);
+        public bool ShirtExists(int id) => database.Shirts.Any(i => i.Id == id);
 
-        public static List<Shirt> GetShirts() => shirts;
+        public List<Shirt> GetShirts() => database.Shirts.ToList();
 
-        public static Shirt? GetShirtById(int id) => shirts.FirstOrDefault(s => s.Id == id);
+        public Shirt? GetShirtById(int id) => database.Shirts.FirstOrDefault(s => s.Id == id);
 
-        public static Shirt? GetShirtByProperties(Shirt shirtData) => shirts.FirstOrDefault(s =>
+        public Shirt? GetShirtByProperties(Shirt shirtData) => database.Shirts.FirstOrDefault(s =>
             !string.IsNullOrWhiteSpace(shirtData.Brand) &&
-            s.Brand.Equals(shirtData?.Brand, StringComparison.OrdinalIgnoreCase) &&
+            s.Brand.Equals(shirtData.Brand, StringComparison.OrdinalIgnoreCase) &&
             !string.IsNullOrWhiteSpace(shirtData.Colour) &&
-            s.Colour.Equals(shirtData?.Colour, StringComparison.OrdinalIgnoreCase) &&
+            s.Colour.Equals(shirtData.Colour, StringComparison.OrdinalIgnoreCase) &&
             shirtData.Size != 0 &&
-            s.Size == shirtData?.Size &&
+            s.Size == shirtData.Size &&
             !string.IsNullOrWhiteSpace(shirtData.Sex) &&
             s.Sex.Equals(shirtData.Sex, StringComparison.OrdinalIgnoreCase));
 
@@ -40,7 +48,7 @@ namespace Web_API_Demo.Repositories
 
         #region ADD
 
-        public static int? AddShirt(Shirt shirt)
+        public int? AddShirt(Shirt shirt)
         {
             if (shirt == null)
                 return null;
@@ -57,7 +65,7 @@ namespace Web_API_Demo.Repositories
 
         #region UPDATE
 
-        public static bool UpdateShirt(Shirt shirtData)
+        public bool UpdateShirt(Shirt shirtData)
         {
             var shirtToUpdate = GetShirtById((int)shirtData.Id);
 
@@ -76,7 +84,7 @@ namespace Web_API_Demo.Repositories
 
         #region DELETE
 
-        public static bool DeleteShirt(int id)
+        public bool DeleteShirt(int id)
         {
             if (id <= 0)
                 return false;

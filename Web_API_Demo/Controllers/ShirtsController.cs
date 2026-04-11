@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Web_API_Demo.Data;
 using Web_API_Demo.Model;
 using Web_API_Demo.Repositories;
 
@@ -8,13 +9,20 @@ namespace Web_API_Demo.Controllers
     [Route("api/[controller]")]
     public class ShirtsController : ControllerBase
     {
+        private readonly ShirtRepository shirtRepository;
+
+        public ShirtsController(ApplicationDBContext dbContext)
+        {
+            shirtRepository = new ShirtRepository(dbContext);
+        }
+
         #region GET
 
         // GET: https://localhost:7104/api/shirts
         [HttpGet]
         public IActionResult GetShirts()
         {
-            return Ok(ShirtRepository.GetShirts());
+            return Ok(shirtRepository.GetShirts());
         }
 
         // GET : https://localhost:7104/api/shirts/1
@@ -24,7 +32,7 @@ namespace Web_API_Demo.Controllers
             if (id <= 0)
                 return BadRequest();
 
-            var result = ShirtRepository.GetShirtById(id);
+            var result = shirtRepository.GetShirtById(id);
             if (result == null)
                 return NotFound();
             else
@@ -33,14 +41,14 @@ namespace Web_API_Demo.Controllers
 
         // GET : https://localhost:7104/api/shirts/1/blue
         [HttpGet("{id}/{colour}")]
-        public IActionResult GetShirtByIdAndColour(int id, [FromRoute]string colour)
+        public IActionResult GetShirtByIdAndColour(int id, [FromRoute] string colour)
         {
             return Ok($"Reading shirt: {id} with colour: '{colour}'");
         }
 
         // GET : https://localhost:7104/api/shirts/getshirt/1?colour=blue&size=large
         [HttpGet("getshirt/{id}")]
-        public string GetShirtByIdAndPassInfo(int id, [FromQuery]string colour, [FromQuery]string size)
+        public string GetShirtByIdAndPassInfo(int id, [FromQuery] string colour, [FromQuery] string size)
         {
             return $"Reading shirt: {id}, with size '{size}' and colour: '{colour}'";
         }
@@ -58,26 +66,26 @@ namespace Web_API_Demo.Controllers
 
         // POST: https://localhost:7104/api/shirts
         [HttpPost]
-        public IActionResult AddShirt([FromForm]Shirt newShirt)
+        public IActionResult AddShirt([FromForm] Shirt newShirt)
         {
             try
             {
                 if (newShirt == null)
                     return BadRequest("Shirt contains no data");
 
-                var shirtAlreadyExists = ShirtRepository.ShirtExists(newShirt.Id ?? 0);
+                var shirtAlreadyExists = shirtRepository.ShirtExists(newShirt.Id ?? 0);
                 if (shirtAlreadyExists)
                     return BadRequest($"Shirt Id '{newShirt.Id}' already exists");
 
-                shirtAlreadyExists = ShirtRepository.GetShirtByProperties(newShirt) != null;
+                shirtAlreadyExists = shirtRepository.GetShirtByProperties(newShirt) != null;
                 if (shirtAlreadyExists)
                     return BadRequest("Shirt with these characteristics already exists");
 
-                var newShirtId = ShirtRepository.AddShirt(newShirt);
+                var newShirtId = shirtRepository.AddShirt(newShirt);
                 if (newShirtId == null)
                     return BadRequest("Shirt creation was unsuccessful");
                 else
-                    return CreatedAtAction(nameof(ShirtRepository.GetShirtById), new { Id = newShirt }, newShirt);
+                    return CreatedAtAction(nameof(shirtRepository.GetShirtById), new { Id = newShirt }, newShirt);
             }
             catch (Exception)
             {
@@ -87,26 +95,26 @@ namespace Web_API_Demo.Controllers
 
         // POST: https://localhost:7104/api/shirts/createshirtwithbody
         [HttpPost("createshirtwithbody")]
-        public IActionResult CreateShirtWithBody([FromBody]Shirt newShirt)
+        public IActionResult CreateShirtWithBody([FromBody] Shirt newShirt)
         {
             try
             {
                 if (newShirt == null)
                     return BadRequest("Shirt contains no data");
 
-                var shirtAlreadyExists = ShirtRepository.ShirtExists(newShirt.Id ?? 0);
+                var shirtAlreadyExists = shirtRepository.ShirtExists(newShirt.Id ?? 0);
                 if (shirtAlreadyExists)
                     return BadRequest($"Shirt Id '{newShirt.Id}' already exists");
 
-                shirtAlreadyExists = ShirtRepository.GetShirtByProperties(newShirt) != null;
+                shirtAlreadyExists = shirtRepository.GetShirtByProperties(newShirt) != null;
                 if (shirtAlreadyExists)
                     return BadRequest("Shirt with these characteristics already exists");
 
-                var newShirtId = ShirtRepository.AddShirt(newShirt);
+                var newShirtId = shirtRepository.AddShirt(newShirt);
                 if (newShirtId == null)
                     return BadRequest("Shirt creation was unsuccessful");
                 else
-                    return CreatedAtAction(nameof(ShirtRepository.GetShirtById), new { Id = newShirt }, newShirt);
+                    return CreatedAtAction(nameof(shirtRepository.GetShirtById), new { Id = newShirt }, newShirt);
             }
             catch (Exception)
             {
@@ -130,10 +138,10 @@ namespace Web_API_Demo.Controllers
                 if (updateShirt.Id == null || updateShirt.Id <= 0)
                     return BadRequest("Shirt Id is out of bounds");
 
-                var shirtExists = ShirtRepository.ShirtExists((int)updateShirt.Id);
+                var shirtExists = shirtRepository.ShirtExists((int)updateShirt.Id);
                 if (shirtExists)
                 {
-                    var result = ShirtRepository.UpdateShirt(updateShirt);
+                    var result = shirtRepository.UpdateShirt(updateShirt);
                     if (result)
                         return Ok($"Shirt with Id '{updateShirt.Id}' successfully updated");
                     else
@@ -161,10 +169,10 @@ namespace Web_API_Demo.Controllers
                 if (id <= 0)
                     return BadRequest("Shirt Id is out of bounds");
 
-                var shirtExists = ShirtRepository.ShirtExists(id);
+                var shirtExists = shirtRepository.ShirtExists(id);
                 if (shirtExists)
                 {
-                    var result = ShirtRepository.DeleteShirt(id);
+                    var result = shirtRepository.DeleteShirt(id);
                     if (result)
                         return Ok($"Shirt with Id '{id}' successfully deleted");
                     else
