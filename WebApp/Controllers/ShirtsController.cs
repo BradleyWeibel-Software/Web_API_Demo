@@ -1,22 +1,40 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Web_API_Demo.Data;
-using Web_API_Demo.Repositories;
+using Web_API_Demo.Model;
+using WebApp.Data;
 
 namespace WebApp.Controllers
 {
     public class ShirtsController : Controller
     {
-        private readonly ShirtRepository shirtRepository;
+        private readonly IWebApiExecuter webApiExecuter;
 
-        public ShirtsController(ApplicationDBContext dbContext)
+        public ShirtsController(IWebApiExecuter webApiExecuter)
         {
-            shirtRepository = new ShirtRepository(dbContext);
+            this.webApiExecuter = webApiExecuter;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var shirts = shirtRepository.GetShirts();
-            return View(shirts);
+            return View(await webApiExecuter.InvokeGet<List<Shirt>>("shirts"));
+        }
+
+        public IActionResult CreateShirt()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateShirt(Shirt shirt)
+        {
+            //if (ModelState.IsValid())
+            //{
+                var response = await webApiExecuter.InvokePost<Shirt>("shirts/createshirtwithbody", shirt);
+                if (response != null)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+            //}
+            return View(shirt);
         }
     }
 }

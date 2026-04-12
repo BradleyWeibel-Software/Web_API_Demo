@@ -5,7 +5,6 @@ namespace Web_API_Demo.Model
 {
     public class Shirt
     {
-        [Required]
         public int? Id { get; set; }
         [Required]
         public string? Brand { get; set; }
