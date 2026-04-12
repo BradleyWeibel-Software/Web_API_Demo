@@ -7,22 +7,28 @@
 <table class="table table-striped">
     <thead>
         <tr>
+            <th>Id</th>
             <th>Brand</th>
             <th>Sex</th>
             <th>Colour</th>
             <th>Size</th>
             <th>Price</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
         @foreach (var shirt in Model)
         {
             <tr>
+                <td>@shirt.Id</td>
                 <td>@shirt.Brand</td>
                 <td>@shirt.Sex</td>
                 <td>@shirt.Colour</td>
                 <td>@shirt.Size</td>
                 <td></td>
+                <td>
+                    <a class="btn btn-link" asp-controller="Shirts" asp-action="EditShirt" asp-route-shirtId="@shirt.Id">Edit</a>
+                </td>
             </tr>
         }
     </tbody>
