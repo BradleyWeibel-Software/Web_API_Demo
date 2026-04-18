@@ -2,43 +2,47 @@
 
 @model List<Shirt>
 
+<div class="text-danger" asp-validation-summary="All"></div>
 <h3>Shirts</h3>
 <br/>
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Id</th>
-            <th>Brand</th>
-            <th>Sex</th>
-            <th>Colour</th>
-            <th>Size</th>
-            <th>Price</th>
-            <th>Update Action</th>
-            <th>Delete Action</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var shirt in Model)
-        {
+@if (Model != null)
+{
+    <table class="table table-striped">
+        <thead>
             <tr>
-                <td>@shirt.Id</td>
-                <td>@shirt.Brand</td>
-                <td>@shirt.Sex</td>
-                <td>@shirt.Colour</td>
-                <td>@shirt.Size</td>
-                <td></td>
-                <td>
-                    <a class="btn btn-link" asp-controller="Shirts" asp-action="EditShirt" asp-route-shirtId="@shirt.Id">Edit</a>
-                </td>
-                <td>
-                    <form method="post" asp-controller="Shirts" asp-action="RemoveShirt" onsubmit="return confirm('Are you sure you want to remove this shirt?')">
-                        <input type="hidden" name="shirtId" value="@shirt.Id" />
-                        <input type="submit" value="Delete" class="btn btn-link" />
-                    </form>
-                </td>
+                <th>Id</th>
+                <th>Brand</th>
+                <th>Sex</th>
+                <th>Colour</th>
+                <th>Size</th>
+                <th>Price</th>
+                <th>Update Action</th>
+                <th>Delete Action</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var shirt in Model)
+            {
+                <tr>
+                    <td>@shirt.Id</td>
+                    <td>@shirt.Brand</td>
+                    <td>@shirt.Sex</td>
+                    <td>@shirt.Colour</td>
+                    <td>@shirt.Size</td>
+                    <td></td>
+                    <td>
+                        <a class="btn btn-link" asp-controller="Shirts" asp-action="EditShirt" asp-route-shirtId="@shirt.Id">Edit</a>
+                    </td>
+                    <td>
+                        <form method="post" asp-controller="Shirts" asp-action="RemoveShirt" onsubmit="return confirm('Are you sure you want to remove this shirt?')">
+                            <input type="hidden" name="shirtId" value="@shirt.Id" />
+                            <input type="submit" value="Delete" class="btn btn-link" />
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
 <br/>
 <a class="btn btn-primary" asp-controller="Shirts" asp-action="createshirt">Add Shirt</a>

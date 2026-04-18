@@ -95,11 +95,21 @@ namespace WebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> RemoveShirt(int shirtId)
         {
-            await webApiExecuter.InvokeDelete($"shirts/{shirtId}");
-            return RedirectToAction(nameof(Index));
+            try
+            {
+                await webApiExecuter.InvokeDelete($"shirts/{shirtId}");
+                return RedirectToAction(nameof(Index));
+            }
+            catch (WebApiException ex)
+            {
+                HandleWebApiException(ex);
+                return View(nameof(Index), await webApiExecuter.InvokeGet<List<Shirt>>("shirts"));
+            }
         }
 
         #endregion
+
+        #region Helpers
 
         private void HandleWebApiException(WebApiException ex)
         {
@@ -111,5 +121,7 @@ namespace WebApp.Controllers
                 }
             }
         }
+
+        #endregion
     }
 }
