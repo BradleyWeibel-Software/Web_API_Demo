@@ -5,36 +5,49 @@
 <h3>Create Shirt</h3>
 <br/>
 <form method="post" asp-action="Createshirt">
+    <div class="text-danger" asp-validation-summary="All"></div>
     <div class="mb-3 row">
         <div class="col-2">
             <label asp-for="Brand" class="col-form-label"></label>
         </div>
-        <div>
+        <div class="col-6">
             <input type="text" asp-for="Brand" class="form-control" />
+        </div>
+        <div class="col-1">
+            <span class="text" asp-validation-for="Brand"></span>
         </div>
     </div>
     <div class="mb-3 row">
         <div class="col-2">
             <label asp-for="Colour" class="col-form-label"></label>
         </div>
-        <div>
+        <div class="col-6">
             <input type="text" asp-for="Colour" class="form-control" />
+        </div>
+        <div class="col-1">
+            <span class="text" asp-validation-for="Colour"></span>
         </div>
     </div>
     <div class="mb-3 row">
         <div class="col-2">
             <label asp-for="Size" class="col-form-label"></label>
         </div>
-        <div>
+        <div class="col-6">
             <input type="text" asp-for="Size" class="form-control" min="1" />
+        </div>
+        <div class="col-1">
+            <span class="text" asp-validation-for="Size"></span>
         </div>
     </div>
     <div class="mb-3 row">
         <div class="col-2">
             <label asp-for="Sex" class="col-form-label"></label>
         </div>
-        <div>
+        <div class="col-6">
             <input type="text" asp-for="Sex" class="form-control" />
+        </div>
+        <div class="col-1">
+            <span class="text" asp-validation-for="Sex"></span>
         </div>
     </div>
     @* <div class="mb-3 row">
