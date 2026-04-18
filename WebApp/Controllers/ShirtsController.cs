@@ -67,5 +67,16 @@ namespace WebApp.Controllers
         }
 
         #endregion
+
+        #region Remove Shirt
+
+        [HttpPost]
+        public async Task<IActionResult> RemoveShirt(int shirtId)
+        {
+            await webApiExecuter.InvokeDelete($"shirts/{shirtId}");
+            return RedirectToAction(nameof(Index));
+        }
+
+        #endregion
     }
 }

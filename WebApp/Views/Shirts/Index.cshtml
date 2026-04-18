@@ -13,7 +13,8 @@
             <th>Colour</th>
             <th>Size</th>
             <th>Price</th>
-            <th>Actions</th>
+            <th>Update Action</th>
+            <th>Delete Action</th>
         </tr>
     </thead>
     <tbody>
@@ -28,6 +29,12 @@
                 <td></td>
                 <td>
                     <a class="btn btn-link" asp-controller="Shirts" asp-action="EditShirt" asp-route-shirtId="@shirt.Id">Edit</a>
+                </td>
+                <td>
+                    <form method="post" asp-controller="Shirts" asp-action="RemoveShirt" onsubmit="return confirm('Are you sure you want to remove this shirt?')">
+                        <input type="hidden" name="shirtId" value="@shirt.Id" />
+                        <input type="submit" value="Delete" class="btn btn-link" />
+                    </form>
                 </td>
             </tr>
         }
