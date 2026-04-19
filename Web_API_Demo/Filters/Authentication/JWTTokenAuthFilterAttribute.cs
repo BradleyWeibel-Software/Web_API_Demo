@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Web_API_Demo.Attributes;
 using Web_API_Demo.Authority;
 
 namespace Web_API_Demo.Filters.Authentication
@@ -33,11 +34,23 @@ namespace Web_API_Demo.Filters.Authentication
             var secretKey = configuration.GetValue<string>("SecurityKey"); // TODO: why can't this come from appsettings in Web_API_Demo instead of WebApp?
             secretKey = secretKey ?? "kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk";
 
-            // 4. Verify the Token
-            if (await Authenticator.VerifyTokenAsync(token, secretKey))
+            // 4. Verify the Token and extract claims
+            var claims = await Authenticator.VerifyTokenAsync(token, secretKey);
+            if (claims != null)
             {
-                // Token is valid, continue with the request
-                return;
+                // Get the claims requirement
+                var requiredClaims = context.ActionDescriptor.EndpointMetadata.OfType<RequiredClaimAttribute>().ToList();
+                if (requiredClaims != null &&
+                    requiredClaims.All(rc => claims.Any(c => c.Type.Equals(rc.ClaimType, StringComparison.OrdinalIgnoreCase) && c.Value.Equals(rc.ClaimValue, StringComparison.OrdinalIgnoreCase))))
+                {
+                    // All required claims are present, allow access
+                    return;
+                }
+                else
+                {
+                    // Required claims are not present
+                    context.Result = new StatusCodeResult(403);
+                }
             }
             else
             {

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Web_API_Demo.Attributes;
 using Web_API_Demo.Data;
 using Web_API_Demo.Filters.Authentication;
 using Web_API_Demo.Model;
@@ -22,6 +23,7 @@ namespace Web_API_Demo.Controllers
 
         // GET: https://localhost:7104/api/shirts
         [HttpGet]
+        [RequiredClaim("read", "true")]
         public IActionResult GetShirts()
         {
             return Ok(shirtRepository.GetShirts());
@@ -29,6 +31,7 @@ namespace Web_API_Demo.Controllers
 
         // GET : https://localhost:7104/api/shirts/1
         [HttpGet("{id}")]
+        [RequiredClaim("read", "true")]
         public IActionResult GetShirtById(int id)
         {
             if (id <= 0)
@@ -97,6 +100,7 @@ namespace Web_API_Demo.Controllers
 
         // POST: https://localhost:7104/api/shirts/createshirtwithbody
         [HttpPost("createshirtwithbody")]
+        [RequiredClaim("write", "true")]
         public IActionResult CreateShirtWithBody([FromBody] Shirt newShirt)
         {
             try
@@ -130,6 +134,7 @@ namespace Web_API_Demo.Controllers
 
         // PUT: https://localhost:7104/api/shirts
         [HttpPut]
+        [RequiredClaim("write", "true")]
         public IActionResult UpdateShirt([FromBody]Shirt updateShirt)
         {
             try
@@ -164,6 +169,7 @@ namespace Web_API_Demo.Controllers
 
         // DELETE: https://localhost:7104/api/shirts/1
         [HttpDelete("{id}")]
+        [RequiredClaim("delete", "true")]
         public IActionResult DeleteShirt(int id)
         {
             try
