@@ -30,7 +30,8 @@ namespace Web_API_Demo.Filters.Authentication
 
             // 3. Get Configuration and the secret key
             var configuration = context.HttpContext.RequestServices.GetService<IConfiguration>();
-            var secretKey = configuration?["SecurityKey"] ?? "kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk"; // TODO: why can't this come from appsettings?
+            var secretKey = configuration.GetValue<string>("SecurityKey"); // TODO: why can't this come from appsettings in Web_API_Demo instead of WebApp?
+            secretKey = secretKey ?? "kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk";
 
             // 4. Verify the Token
             if (await Authenticator.VerifyTokenAsync(token, secretKey))

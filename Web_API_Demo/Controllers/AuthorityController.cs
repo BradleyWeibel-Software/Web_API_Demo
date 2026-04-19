@@ -19,7 +19,9 @@ namespace Web_API_Demo.Controllers
             if (Authenticator.Authenticate(credential.ClientId, credential.Secret))
             {
                 var expiresAt = DateTime.UtcNow.AddMinutes(10);
-                var securityKey = _configuration["SecurityKey"] ?? "kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk"; // TODO: ensure code comes from appsettings and is not hardcoded here
+                var securityKey = _configuration.GetValue<string>("SecurityKey");
+                securityKey = securityKey ?? "kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk"; // TODO: why can't this come from appsettings in Web_API_Demo instead of WebApp?
+
                 return Ok(new
                 {
                     access_token = Authenticator.CreateToken(credential.ClientId, expiresAt, securityKey),

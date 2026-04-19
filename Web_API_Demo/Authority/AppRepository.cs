@@ -8,8 +8,8 @@
             {
                 ApplicationId = 1,
                 ApplicationName = "MVCWebApp",
-                ClientId = "53D3C1E6-1234-4QWE-ASAFJ1689AJ1K1",
-                Secret = "ASDAD1AS-12AS-123A-123ASDAD12ASDA",
+                ClientId = "53D3C1E6-1234-4QWE-ASAFJ1689AJ1K1", // TODO: get from appsettings
+                Secret = "ASDAD1AS-12AS-123A-123ASDAD12ASDA", // TODO: get from appsettings
                 Scopes = "read,write"
             }
         };
