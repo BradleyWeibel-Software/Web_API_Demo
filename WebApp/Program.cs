@@ -13,6 +13,12 @@ builder.Services.AddHttpClient("ShirtsApi", client =>
     client.DefaultRequestHeaders.Add("Accept", "application/json");
 });
 
+builder.Services.AddHttpClient("AuthorityApi", client => 
+{
+    client.BaseAddress = new Uri("https://localhost:7222/");
+    client.DefaultRequestHeaders.Add("Accept", "application/json");
+});
+
 builder.Services.AddDbContext<ApplicationDBContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("ShirtStoreManagement"));

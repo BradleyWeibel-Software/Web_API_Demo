@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Web_API_Demo.Data;
+using Web_API_Demo.Filters.Authentication;
 using Web_API_Demo.Model;
 using Web_API_Demo.Repositories;
 
@@ -7,6 +8,7 @@ namespace Web_API_Demo.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [JWTTokenAuthFilter]
     public class ShirtsController : ControllerBase
     {
         private readonly ShirtRepository shirtRepository;
